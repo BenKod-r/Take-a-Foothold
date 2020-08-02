@@ -32,7 +32,7 @@ class ImageController extends AbstractController
      */
     public function index(ImageRepository $imageRepository, Request $request): Response
     {
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -80,7 +80,7 @@ class ImageController extends AbstractController
             return $this->redirectToRoute('image_index');
         }
 
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -123,5 +123,3 @@ class ImageController extends AbstractController
         return $this->redirectToRoute('image_index');
     }
 }
-
-

@@ -1,19 +1,7 @@
 grumphp:
     tasks:
         phpcs:
-            standard: []
-            severity: ~
-            error_severity: 6
-            warning_severity: 6
-            tab_width: ~
-            report: full
-            report_width: ~
-            whitelist_patterns: []
-            encoding: ~
-            ignore_patterns: []
-            sniffs: []
-            triggered_by: [php]
-            exclude: []
+            standard: ~
         phplint:
             exclude: []
             jobs: ~
