@@ -3,8 +3,8 @@ grumphp:
         phpcs:
             standard: []
             severity: ~
-            error_severity: 8
-            warning_severity: 8
+            error_severity: 6
+            warning_severity: 6
             tab_width: ~
             report: full
             report_width: ~
