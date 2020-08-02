@@ -186,7 +186,7 @@ class PlayerController extends AbstractController
         }
 
         return $this->render('player/image.html.twig', [
-            'images' => $imageRepository->findAll(),
+            'images' => $imageRepository->findBy([], ['creationDate' => 'DESC']),
             'player' => $player,
             'search' => $searchPlayer->createView(),
         ]);
@@ -202,7 +202,7 @@ class PlayerController extends AbstractController
         $player->setPoster($image);
         $entityManager->flush();
         
-        return $this->redirectToRoute('player_index');
+        return $this->redirectToRoute('player_show', ['id' => $player->getId()]);
     }
 
 

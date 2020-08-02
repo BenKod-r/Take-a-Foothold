@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Image;
-use App\Form\ImageType;
+use App\Entity\Player;
 use App\Form\SearchPlayerType;
-use App\Repository\ImageRepository;
+use App\Entity\Image;
+use App\Entity\Video;
+use App\Form\VideoType;
+use App\Form\ImageType;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,17 +21,19 @@ use Symfony\Component\HttpFoundation\File\Exception\FormSizeFileException;
 use Symfony\Component\HttpFoundation\File\Exception\IniSizeFileException;
 use Symfony\Component\HttpFoundation\File\Exception\NoFileException;
 use Symfony\Component\HttpFoundation\File\Exception\PartialFileException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @Route("/image")
+ * @Route("/media")
  */
-class ImageController extends AbstractController
+class MediaController extends AbstractController
 {
     /**
-     * @Route("/", name="image_index", methods={"GET", "POST"})
-     * @IsGranted("ROLE_ADMIN")
+     * Return a player
+     * @Route("/{player}", name="media_index", methods={"GET", "POST"})
      */
-    public function index(ImageRepository $imageRepository, Request $request): Response
+    public function index(Player $player, Request $request): Response
     {
         $searchPlayer = $this->createForm(SearchPlayerType::class,);
         $searchPlayer->handleRequest($request);
@@ -40,44 +43,50 @@ class ImageController extends AbstractController
             return $this->redirectToRoute('search_index', ['criteria' => $criteria['name']]);
         }
 
-        return $this->render('image/index.html.twig', [
-            'images' => $imageRepository->findBy([], ['creationDate' => 'DESC']),
+        return $this->render('media/index.html.twig', [
+            'player' => $player,
             'search' => $searchPlayer->createView(),
         ]);
     }
 
     /**
-     * Upload image to library, add unique name
-     * @Route("/new", name="image_new", methods={"GET","POST"})
+     * Upload image to library, add unique name and add the image to the player
+     * @Route("/new/{player}/image", name="media_new_image", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function new(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager): Response
-    {
+    public function newImage(
+        Request $request,
+        FileUploader $fileUploader,
+        Player $player,
+        EntityManagerInterface $entityManager
+    ): Response {
+
         $image = new Image();
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $imageFile */
-            $imageFile = $form->get('img')->getData();
+            $posterFile = $form->get('img')->getData();
             try {
-                $imagePath = $fileUploader->upload($imageFile, $image->getName());
+                $posterPath = $fileUploader->upload($posterFile, $image->getName());
             } catch (IniSizeFileException | FormSizeFileException $e) {
                 $this->addFlash('warning', 'Votre fichier est trop lourd, il ne doit pas dépasser 1Mo.');
-                return $this->redirectToRoute('image_new');
+                return $this->redirectToRoute('player_add_poster', ['payer' => $player->getId()]);
             } catch (ExtensionFileException $e) {
                 $this->addFlash('warning', 'Le format de votre fichier n\'est pas supporté.
                     Votre fichier doit être au format jpeg, jpg ou png.');
-                return $this->redirectToRoute('image_new');
+                return $this->redirectToRoute('player_add_poster', ['player' => $player->getId()]);
             } catch (PartialFileException | NoFileException | CannotWriteFileException $e) {
                 $this->addFlash('warning', 'Fichier non enregistré, veuillez réessayer.
                     Si le problème persiste, veuillez contacter l\'administrateur du site');
-                return $this->redirectToRoute('image_new');
+                return $this->redirectToRoute('player_add_poster', ['player' => $player->getId()]);
             }
-            $image->setPath($imagePath);
+            $image->setPath($posterPath);
             $entityManager->persist($image);
+            $image->addPlayer($player);
             $entityManager->flush();
-            return $this->redirectToRoute('image_index');
+            return $this->redirectToRoute('media_index', ['player' => $player->getId()]);
         }
 
         $searchPlayer = $this->createForm(SearchPlayerType::class,);
@@ -88,18 +97,55 @@ class ImageController extends AbstractController
             return $this->redirectToRoute('search_index', ['criteria' => $criteria['name']]);
         }
 
-        return $this->render('image/new.html.twig', [
+        return $this->render('media/new_image.html.twig', [
             'image' => $image,
+            'player' => $player,
             'form' => $form->createView(),
             'search' => $searchPlayer->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="image_delete", methods={"DELETE"})
+     * Add the Video to the player
+     * @Route("/new/{player}/video", name="media_new_video", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function delete(Request $request, Image $image): Response
+    public function newVideo(Request $request, Player $player, EntityManagerInterface $entityManager): Response {
+
+        $video = new Video();
+        $form = $this->createForm(VideoType::class, $video);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $video->addPlayer($player);
+            $entityManager->persist($video);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('media_index', ['player' => $player->getId()]);
+        }
+
+        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer->handleRequest($request);
+
+        if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
+            $criteria = $searchPlayer->getData();
+            return $this->redirectToRoute('search_index', ['criteria' => $criteria['name']]);
+        }
+
+        return $this->render('media/new_video.html.twig', [
+            'video' => $video,
+            'form' => $form->createView(),
+            'search' => $searchPlayer->createView(),
+        ]);
+    }
+
+    /**
+     * Remove an image from a player
+     * @Route("/{image}/{player}", name="media_delete_image", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function delete(Request $request, Image $image, Player $player): Response
     {
         if ($this->isCsrfTokenValid('delete'.$image->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -120,6 +166,6 @@ class ImageController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('image_index');
+        return $this->redirectToRoute('media_index', ['player' => $player->getId()]);
     }
 }

@@ -4,12 +4,12 @@
 
 {% block body %}
     <section>
-        <h1 class="text-center">Videothèque</h1>
+        <h1 class="title-section text-white bg-dark text-center">Videothèque</h1>
         <div class="card-deck">
         {% for video in videos %}
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-6">
                 <div class="card">
-                    <iframe class="card-img-top" width="560" height="315" src="{{ asset (video.path) }}" alt="Card video cap" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe class="card-img-top" width="560" height="500" src="{{ asset (video.path) }}" alt="Card video cap" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     <div class="card-body">
                         <h1 class="card-title d-flex justify-content-center fas">{{ video.name }}</h1>
                         <p class="card-text text-justify">{{ video.description }}</p>

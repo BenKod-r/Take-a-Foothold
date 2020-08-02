@@ -2,10 +2,10 @@
 {% block body %}
     <section class="index">
         <div class="container">
-            <h1 class="title-home text-center font-italic">Site de référencement des meilleurs joueurs de la planète</h1>
+            <h1 class="title-home text-center text-white bg-dark font-italic">Site de référencement des meilleurs joueurs de la planète</h1>
         </div>
         <div class="container">
-            <h2 class="title-home-2 text-center">Joueurs en forme</h2>
+            <h2 class="title-home-2 tex-dark bg-warning text-center">Joueurs en forme</h2>
         </div>
         {% for player in players %}
             {% if loop.index is divisible by(2) %}

@@ -7,7 +7,7 @@ body {
     font-family: 'Electrolize', sans-serif;
     font-size: 25px;
     width: 100%;
-    padding-top:85px;
+    padding-top:70px;
     overflow: auto;
 }
 
@@ -24,9 +24,26 @@ body {
 }
 
 .index img {
-    width: 500px;
-    height: 500px;
+    width: 700px;
+    height: 850px;
     border-radius: 10px;
+}
+
+@media screen and (min-width: 992px) {
+    .index img {
+        width: 400px;
+        height: 500px;
+    }
+}
+
+.index .none {
+    font-size: 55px;
+}
+
+@media screen and (min-width: 992px) {
+    .index .none {
+        font-size: initial;
+    }
 }
 
 .index .index-card {

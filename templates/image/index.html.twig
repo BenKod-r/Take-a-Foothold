@@ -4,14 +4,14 @@
 
 {% block body %}
     <section>
-        <h1 class="text-center">Bibliothèque d'images</h1>
+        <h1 class="title-section text-white bg-dark text-center">Bibliothèque d'images</h1>
         <div class="card-deck">
         {% for image in images %}
             <div class="col-6 col-xl-3">
                 <div class="card">
                     <img class="card-img-top" src="{{ asset ('/uploads/images/' ~ image.path) }}" alt="Card image cap">
                     <div class="card-body">
-                        <h1 class="card-title d-flex justify-content-center fas">{{ image.name }}</h1>
+                        <h1 class="card-title d-flex justify-content-center row fas">{{ image.name }}</h1>
                         <p class="card-text text-justify">{{ image.description }}</p>
                     </div>
                     {{ include('image/_delete_form.html.twig') }}

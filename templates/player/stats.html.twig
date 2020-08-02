@@ -5,7 +5,7 @@
 {% block body %}
     <section>
         {% if playerStats.name is not empty %}
-        <h1 class="text-center">Stats de {{ playerStats.name }}</h1>
+        <h1 class="title-section text-white bg-dark text-center">Stats de {{ playerStats.name }}</h1>
 
         <table class="table">
             <tbody>
@@ -77,7 +77,7 @@
         </div>
         {% endif %}
         <div>
-            <a href="{{ path('player_index') }}">Liste des joueurs</a>
+            <a href="{{ path('player_show', {'id' : player.id}) }}">Fiche du joueur</a>
         </div>
         <div>
             <a href="{{ path('index') }}">Revenir à l'accueil</a>

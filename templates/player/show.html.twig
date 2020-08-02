@@ -4,7 +4,7 @@
 
 {% block body %}
 <section>
-    <h1 class="text-center">{{ player.name }}</h1>
+    <h1 class="title-section text-white bg-dark text-center">{{ player.name }}</h1>
 
     <table class="table">
         <tbody>
@@ -43,6 +43,9 @@
         </tbody>
     </table>
     <div>
+        <a href="{{ path('media_index', {'player' : player.id}) }}">Médias du joueur</a>
+    </div>
+    <div>
         <a href="{{ path('player_index') }}">Retour à la liste</a>
     </div>
     <div>
@@ -50,7 +53,7 @@
     </div>
     {% if app.user %}
     <div>
-        <a href="{{ path('player_edit', {'id': player.id}) }}">Modifier</a>
+        <a href="{{ path('player_edit', {'id' : player.id}) }}">Modifier</a>
     </div>
     {{ include('player/_delete_form.html.twig') }}
     {% endif %}

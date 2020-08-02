@@ -12,18 +12,24 @@
     <body>
     <header>
         {% include "navbar.html.twig" %}
-        {% for category, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ category }}">
-                    {{ message }}
-                </div>
+        <div class="container text-center">
+            {% for category, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
+        </div>
     </header>
         {% block body %}{% endblock %}
         {% include "footer.html.twig" %}
         {% block javascripts %}
            {{ encore_entry_script_tags('app') }}
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+            <script>
+                $("input[type=file]").change(function (e){$(this).next('.custom-file-label').text(e.target.files[0].name);})
+            </script>
         {% endblock %}
     </body>
 </html>

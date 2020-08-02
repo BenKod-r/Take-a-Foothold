@@ -29,7 +29,7 @@ class IndexController extends AbstractController
         }
 
         return $this->render('index.html.twig', [
-            'players' => $playerRepository->findBy([], ['creationDate' =>'DESC'], 5),
+            'players' => $playerRepository->findBy([], ['creationDate' =>'DESC']),
             'search' => $searchPlayer->createView(),
         ]);
     }
@@ -40,7 +40,7 @@ class IndexController extends AbstractController
      * @Route("/search/{criteria}", name="search_index")
      * @return Response A response instance
      */
-    public function search(Request $request, PlayerRepository $playerRepository, array $criteria) :Response
+    public function search(Request $request, PlayerRepository $playerRepository, string $criteria) :Response
     {
         $searchPlayer = $this->createForm(SearchPlayerType::class,);
         $searchPlayer->handleRequest($request);

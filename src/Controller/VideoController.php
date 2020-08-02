@@ -33,7 +33,7 @@ class VideoController extends AbstractController
         }
 
         return $this->render('video/index.html.twig', [
-            'videos' => $videoRepository->findAll(),
+            'videos' => $videoRepository->findBy([], ['creationDate' => 'DESC']),
             'search' => $searchPlayer->createView(),
         ]);
     }

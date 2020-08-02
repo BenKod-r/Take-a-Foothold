@@ -17,7 +17,7 @@ class ImageType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nome de l\'image',
+                'label' => 'Nom de l\'image',
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
