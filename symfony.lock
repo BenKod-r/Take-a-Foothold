@@ -1,4 +1,28 @@
 {
+    "amphp/amp": {
+        "version": "v2.5.0"
+    },
+    "amphp/byte-stream": {
+        "version": "v1.8.0"
+    },
+    "amphp/parallel": {
+        "version": "v1.4.0"
+    },
+    "amphp/parallel-functions": {
+        "version": "v0.1.3"
+    },
+    "amphp/parser": {
+        "version": "v1.0.0"
+    },
+    "amphp/process": {
+        "version": "v1.1.0"
+    },
+    "amphp/serialization": {
+        "version": "v1.0.0"
+    },
+    "amphp/sync": {
+        "version": "v1.4.0"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.10.99"
     },
@@ -84,6 +108,9 @@
     "egulias/email-validator": {
         "version": "2.1.18"
     },
+    "gitonomy/gitlib": {
+        "version": "v1.2.2"
+    },
     "laminas/laminas-code": {
         "version": "3.4.1"
     },
@@ -102,8 +129,14 @@
     "ocramius/proxy-manager": {
         "version": "2.8.0"
     },
+    "opis/closure": {
+        "version": "3.5.5"
+    },
     "php": {
         "version": "7.4"
+    },
+    "php-parallel-lint/php-parallel-lint": {
+        "version": "v1.2.0"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -113,6 +146,9 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "1.3.0"
+    },
+    "phpro/grumphp": {
+        "version": "v0.19.1"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -126,6 +162,9 @@
     "psr/log": {
         "version": "1.1.3"
     },
+    "seld/jsonlint": {
+        "version": "1.8.0"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -137,6 +176,15 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "squizlabs/php_codesniffer": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "0dc9cceda799fd3a08b96987e176a261028a3709"
+        }
     },
     "symfony/asset": {
         "version": "v4.4.10"
