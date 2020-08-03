@@ -29,6 +29,9 @@ class ImageController extends AbstractController
     /**
      * @Route("/", name="image_index", methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
+     * @param ImageRepository $imageRepository
+     * @param Request $request
+     * @return Response
      */
     public function index(ImageRepository $imageRepository, Request $request): Response
     {
@@ -50,6 +53,10 @@ class ImageController extends AbstractController
      * Upload image to library, add unique name
      * @Route("/new", name="image_new", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
     public function new(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager): Response
     {
@@ -98,6 +105,9 @@ class ImageController extends AbstractController
     /**
      * @Route("/{id}", name="image_delete", methods={"DELETE"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Request $request
+     * @param Image $image
+     * @return Response
      */
     public function delete(Request $request, Image $image): Response
     {

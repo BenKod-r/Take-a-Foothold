@@ -35,7 +35,8 @@ class MediaController extends AbstractController
      */
     public function index(Player $player, Request $request): Response
     {
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        /** @var TYPE_NAME $this */
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -53,6 +54,11 @@ class MediaController extends AbstractController
      * Upload image to library, add unique name and add the image to the player
      * @Route("/new/{player}/image", name="media_new_image", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param Player $player
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
     public function newImage(
         Request $request,
@@ -67,6 +73,7 @@ class MediaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $imageFile */
+            /** @var TYPE_NAME $posterFile */
             $posterFile = $form->get('img')->getData();
             try {
                 $posterPath = $fileUploader->upload($posterFile, $image->getName());
@@ -88,10 +95,9 @@ class MediaController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('media_index', ['player' => $player->getId()]);
         }
-
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        /** @var TYPE_NAME $searchPlayer */
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
-
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
             $criteria = $searchPlayer->getData();
             return $this->redirectToRoute('search_index', ['criteria' => $criteria['name']]);
@@ -109,8 +115,13 @@ class MediaController extends AbstractController
      * Add the Video to the player
      * @Route("/new/{player}/video", name="media_new_video", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Request $request
+     * @param Player $player
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
-    public function newVideo(Request $request, Player $player, EntityManagerInterface $entityManager): Response {
+    public function newVideo(Request $request, Player $player, EntityManagerInterface $entityManager): Response
+    {
 
         $video = new Video();
         $form = $this->createForm(VideoType::class, $video);
@@ -124,10 +135,8 @@ class MediaController extends AbstractController
 
             return $this->redirectToRoute('media_index', ['player' => $player->getId()]);
         }
-
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
-
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
             $criteria = $searchPlayer->getData();
             return $this->redirectToRoute('search_index', ['criteria' => $criteria['name']]);
@@ -144,6 +153,10 @@ class MediaController extends AbstractController
      * Remove an image from a player
      * @Route("/{image}/{player}", name="media_delete_image", methods={"DELETE"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Request $request
+     * @param Image $image
+     * @param Player $player
+     * @return Response
      */
     public function delete(Request $request, Image $image, Player $player): Response
     {

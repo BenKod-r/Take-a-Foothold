@@ -14,13 +14,14 @@ class IndexController extends AbstractController
 {
     /**
      * Home page display
-     * 
      * @Route("/",name="index")
+     * @param Request $request
+     * @param PlayerRepository $playerRepository
      * @return Response A response instance
      */
     public function index(Request $request, PlayerRepository $playerRepository) :Response
     {
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -36,13 +37,15 @@ class IndexController extends AbstractController
 
     /**
      * Home page display search bar
-     * 
      * @Route("/search/{criteria}", name="search_index")
+     * @param Request $request
+     * @param PlayerRepository $playerRepository
+     * @param string $criteria
      * @return Response A response instance
      */
     public function search(Request $request, PlayerRepository $playerRepository, string $criteria) :Response
     {
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
         $players = $playerRepository->searchPlayer($criteria);
 
