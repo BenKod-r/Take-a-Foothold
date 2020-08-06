@@ -21,12 +21,9 @@ class PerformanceRepository extends ServiceEntityRepository
 
     /**
      * Classement des buteurs
-     * 
      * @return Performance[] Returns an array of Performance objects
-     * @param Performance $performance
-     * @return array
      */
-    public function classementGoals() :?array
+    public function rankingGoals() :?array
     {
         return $this->createQueryBuilder('p')
             ->innerJoin('p.player', 'pl')
@@ -44,12 +41,9 @@ class PerformanceRepository extends ServiceEntityRepository
 
     /**
      * Classement des passeurs
-     * 
      * @return Performance[] Returns an array of Performance objects
-     * @param Performance $performance
-     * @return array
      */
-    public function classementAssists() :?array
+    public function rankingAssists() :?array
     {
         return $this->createQueryBuilder('p')
             ->innerJoin('p.player', 'pl')

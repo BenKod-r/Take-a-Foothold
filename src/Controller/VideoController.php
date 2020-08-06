@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 /**
  * @Route("/video")
  */
@@ -21,10 +20,13 @@ class VideoController extends AbstractController
     /**
      * @Route("/", name="video_index", methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
+     * @param VideoRepository $videoRepository
+     * @param Request $request
+     * @return Response
      */
     public function index(VideoRepository $videoRepository, Request $request): Response
     {
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -41,6 +43,8 @@ class VideoController extends AbstractController
     /**
      * @Route("/new", name="video_new", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -56,7 +60,7 @@ class VideoController extends AbstractController
             return $this->redirectToRoute('video_index');
         }
 
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -74,6 +78,9 @@ class VideoController extends AbstractController
     /**
      * @Route("/{id}", name="video_delete", methods={"DELETE"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Request $request
+     * @param Video $video
+     * @return Response
      */
     public function delete(Request $request, Video $video): Response
     {

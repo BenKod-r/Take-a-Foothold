@@ -14,6 +14,9 @@ class SecurityController extends AbstractController
 {
     /**
      * @Route("/login", name="app_login")
+     * @param Request $request
+     * @param AuthenticationUtils $authenticationUtils
+     * @return Response
      */
     public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
@@ -26,7 +29,7 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -47,6 +50,8 @@ class SecurityController extends AbstractController
      */
     public function logout()
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new \LogicException(
+            'This method can be blank - it will be intercepted by the logout key on your firewall.'
+        );
     }
 }

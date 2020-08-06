@@ -33,10 +33,13 @@ class PlayerController extends AbstractController
 {
     /**
      * @Route("/", name="player_index", methods={"GET", "POST"})
+     * @param PlayerRepository $playerRepository
+     * @param Request $request
+     * @return Response
      */
     public function index(PlayerRepository $playerRepository, Request $request): Response
     {
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -51,12 +54,15 @@ class PlayerController extends AbstractController
 
     /**
      * @Route("/search/advanced", name="search_player", methods={"GET", "POST"})
+     * @param PlayerRepository $playerRepository
+     * @param Request $request
+     * @return Response
      */
     public function searchPlayer(PlayerRepository $playerRepository, Request $request): Response
     {
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
-        $searchPlayerForm = $this->createForm(SearchPlayerAdvancedType::class,);
+        $searchPlayerForm = $this->createForm(SearchPlayerAdvancedType::class);
         $searchPlayerForm->handleRequest($request);
         $players = [];
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -80,6 +86,9 @@ class PlayerController extends AbstractController
 
     /**
      * @Route("/new", name="player_new", methods={"GET","POST"})
+     * @param Request $request
+     * @param UserInterface|null $user
+     * @return Response
      */
     public function new(Request $request, ?UserInterface $user): Response
     {
@@ -98,7 +107,7 @@ class PlayerController extends AbstractController
             }
         }
 
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -117,6 +126,11 @@ class PlayerController extends AbstractController
      * Upload image to library, add unique name and add the image to the player
      * @Route("/new/{player}/addposter", name="player_add_poster", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param Player $player
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
     public function newWithPoster(
         Request $request,
@@ -154,7 +168,7 @@ class PlayerController extends AbstractController
             return $this->redirectToRoute('player_index');
         }
 
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -170,14 +184,18 @@ class PlayerController extends AbstractController
         ]);
     }
 
-     /**
+    /**
      * List of all posters, choice of a poster for a player
      * @Route("/new/{player}", name="player_choice_poster", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Player $player
+     * @param ImageRepository $imageRepository
+     * @param Request $request
+     * @return Response
      */
     public function choicePoster(player $player, ImageRepository $imageRepository, Request $request): Response
     {
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -196,9 +214,16 @@ class PlayerController extends AbstractController
      * Add a poster to a player and redirection to list of poster
      * @Route("/new/{player}/image/{image}", name="player_new_poster", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Player $player
+     * @param Image $image
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
-    public function addPoster(player $player, Image $image, EntityManagerInterface $entityManager, Request $request): Response
-    {
+    public function addPoster(
+        player $player,
+        Image $image,
+        EntityManagerInterface $entityManager
+    ): Response {
         $player->setPoster($image);
         $entityManager->flush();
         
@@ -208,10 +233,13 @@ class PlayerController extends AbstractController
 
     /**
      * @Route("/{id}", name="player_show", methods={"GET", "POST"})
+     * @param Player $player
+     * @param Request $request
+     * @return Response
      */
     public function show(Player $player, Request $request): Response
     {
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -227,10 +255,14 @@ class PlayerController extends AbstractController
 
     /**
      * @Route("/{player}/stats", name="player_stats", methods={"GET", "POST"})
+     * @param Player $player
+     * @param Request $request
+     * @param PlayerRepository $playerRepository
+     * @return Response
      */
     public function showStats(Player $player, Request $request, PlayerRepository $playerRepository): Response
     {
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
         
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -245,10 +277,13 @@ class PlayerController extends AbstractController
         ]);
     }
 
-    
+
     /**
      * @Route("/{id}/edit", name="player_edit", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Request $request
+     * @param Player $player
+     * @return Response
      */
     public function edit(Request $request, Player $player): Response
     {
@@ -261,7 +296,7 @@ class PlayerController extends AbstractController
             return $this->redirectToRoute('player_index');
         }
 
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -279,6 +314,9 @@ class PlayerController extends AbstractController
     /**
      * @Route("/{id}", name="player_delete", methods={"DELETE"})
      * @IsGranted("ROLE_ADMIN")
+     * @param Request $request
+     * @param Player $player
+     * @return Response
      */
     public function delete(Request $request, Player $player): Response
     {

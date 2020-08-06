@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\File\Exception\IniSizeFileException;
 use Symfony\Component\HttpFoundation\File\Exception\NoFileException;
 use Symfony\Component\HttpFoundation\File\Exception\PartialFileException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("/media")
@@ -32,10 +31,12 @@ class MediaController extends AbstractController
     /**
      * Return a player
      * @Route("/{player}", name="media_index", methods={"GET", "POST"})
+     * @param Player $player
+     * @param Request $request
+     * @return Response
      */
     public function index(Player $player, Request $request): Response
     {
-        /** @var TYPE_NAME $this */
         $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
@@ -72,8 +73,7 @@ class MediaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile $imageFile */
-            /** @var TYPE_NAME $posterFile */
+            /** @var UploadedFile $posterFile */
             $posterFile = $form->get('img')->getData();
             try {
                 $posterPath = $fileUploader->upload($posterFile, $image->getName());
@@ -95,7 +95,6 @@ class MediaController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('media_index', ['player' => $player->getId()]);
         }
-        /** @var TYPE_NAME $searchPlayer */
         $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
@@ -117,12 +116,10 @@ class MediaController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      * @param Request $request
      * @param Player $player
-     * @param EntityManagerInterface $entityManager
      * @return Response
      */
-    public function newVideo(Request $request, Player $player, EntityManagerInterface $entityManager): Response
+    public function newVideo(Request $request, Player $player): Response
     {
-
         $video = new Video();
         $form = $this->createForm(VideoType::class, $video);
         $form->handleRequest($request);

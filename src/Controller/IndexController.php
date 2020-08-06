@@ -1,9 +1,13 @@
 <?php
+/**
+ * Created by IntelliJ IDEA
+ * Author : Khaled Benharrat
+ * Date : now
+ */
 
 namespace App\Controller;
 
 use App\Form\SearchPlayerType;
-use App\Entity\Player;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,6 +32,9 @@ class IndexController extends AbstractController
             $criteria = $searchPlayer->getData();
             return $this->redirectToRoute('search_index', ['criteria' => $criteria['name']]);
         }
+        /*$response = file_get_contents('https://www.instagram.com/brocenscene/?__a=1');
+        $data = json_decode($response, true);
+        dd($data);*/
 
         return $this->render('index.html.twig', [
             'players' => $playerRepository->findBy([], ['creationDate' =>'DESC']),

@@ -2,7 +2,7 @@
     {% if app.user %}
         <a class="navbar-brand" href="{{ path('index')}}"><i class="fas fa-user-astronaut fa-2x mr-2 ml-1 text-warning">TAF</i></a>
     {% else %}
-        <a class="img-icons navbar-brand d-flex align-items-center" href="{{ path('index')}}"><img src="{{ asset ('/uploads/images/icons-trophy6.png') }}" /><h1 class="fas mr-2 ml-1 text-warning">TAF</h1></a>
+        <a class="img-icons navbar-brand d-flex align-items-center" href="{{ path('index')}}"><img src="{{ asset ('/uploads/images/icons-trophy6.png') }}" alt="logo"/><h1 class="fas mr-2 ml-1 text-warning">TAF</h1></a>
     {% endif %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -35,6 +35,13 @@
             </li>
             {% if app.user %}
             <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Medias</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ path('video_index')}}">Vidéothèque</a>
+                    <a class="dropdown-item" href="{{ path('image_index')}}">Bibliothéque d'images</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ path('player_new')}}">Ajouter un joueur</a>
@@ -44,13 +51,6 @@
                     <div class="dropdown-divider">
                     </div>
                     <a class="dropdown-item" href="{{ path('app_logout')}}"><i class="fas fa-sign-out-alt"> </i>Se deconnecter</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Medias</a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ path('video_index')}}">Vidéothèque</a>
-                    <a class="dropdown-item" href="{{ path('image_index')}}">Bibliothéque d'images</a>
                 </div>
             </li>
             {% endif %}

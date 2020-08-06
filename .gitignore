@@ -28,3 +28,7 @@ yarn-error.log
 ###> symfony/upload ###
 /public/uploads/
 ###< symfony/upload ###
+
+###> IntelliJ/idea ###
+/.idea
+###< IntelliJ/idea ###

@@ -16,9 +16,16 @@ class RegistrationController extends AbstractController
 {
     /**
      * @Route("/register", name="app_register")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param UserRepository $userRepository
+     * @return Response
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository): Response
-    {
+    public function register(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        UserRepository $userRepository
+    ): Response {
         if (!empty($userRepository->findAll())) {
             return $this->redirectToRoute('index');
         }
@@ -45,7 +52,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('index');
         }
 
-        $searchPlayer = $this->createForm(SearchPlayerType::class,);
+        $searchPlayer = $this->createForm(SearchPlayerType::class);
         $searchPlayer->handleRequest($request);
 
         if ($searchPlayer->isSubmitted() && $searchPlayer->isValid()) {
